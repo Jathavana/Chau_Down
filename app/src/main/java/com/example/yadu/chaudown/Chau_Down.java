@@ -10,11 +10,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 public class Chau_Down extends ActionBarActivity implements ActionBar.TabListener {
@@ -178,7 +180,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_chau__down, container, false);
             return rootView;
         }
     }
