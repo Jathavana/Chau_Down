@@ -41,7 +41,7 @@ public class ButtonAdapter extends BaseAdapter {
         ImageButton imageButton;
         if (convertView == null) {
             imageButton = new ImageButton(mContext);
-            imageButton.setLayoutParams(new GridView.LayoutParams(300, 300));
+            imageButton.setLayoutParams(new GridView.LayoutParams(-1, -1));
             imageButton.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageButton.setPadding(0, 0, 0, 0);
             imageButton.setFocusable(false);
@@ -56,14 +56,6 @@ public class ButtonAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
             R.drawable.sample_2, R.drawable.sample_3,
             R.drawable.sample_4, R.drawable.sample_5,
     };

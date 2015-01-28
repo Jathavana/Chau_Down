@@ -215,6 +215,16 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
+
+            GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
+            gridview.setAdapter(new ButtonAdapter(getActivity()));
+
+            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+                }
+            });
+
             return rootView;
         }
     }
