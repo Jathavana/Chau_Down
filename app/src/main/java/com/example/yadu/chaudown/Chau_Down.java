@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Locale;
 
 
+import android.app.Activity;
 import android.app.ListFragment;
 
+import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 
 import android.support.v7.app.ActionBarActivity;
@@ -18,7 +20,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,26 +100,15 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        /*getMenuInflater().inflate(R.menu.menu_chau__down, menu);
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(
-                new ComponentName(getApplicationContext(), SearchableActivity.class)));*/
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_chau__down, menu);
 
-        // Get the SearchView and set the searchable configuration
-        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        //SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        // Assumes current activity is the searchable activity
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-       // searchView.setIconifiedByDefault(false);
+        // Associate searchable configuration with the SearchView
+        /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
 
         return true;
     }
@@ -176,6 +166,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                     return PlaceholderFragment.newInstance(position + 1);
             }
         }
+
         @Override
         public int getCount() {
             // Show 3 total pages.
@@ -224,16 +215,6 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
-
-            GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
-            gridview.setAdapter(new ButtonAdapter(getActivity()));
-
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    Toast.makeText(getActivity().getApplicationContext(), "test:" + position, Toast.LENGTH_SHORT).show();
-                }
-            });
-
             return rootView;
         }
     }
@@ -343,5 +324,6 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
 
             return rootView;
         }
+
     }
 }
