@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+
 import android.app.ListFragment;
+
+import android.support.v4.view.MenuItemCompat;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -19,7 +23,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.ExpandableListView;
+
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.app.SearchManager;
+import android.widget.SearchView;
+import android.content.Context;
+import android.content.ComponentName;
+import android.view.MenuInflater;
+
+
+
 
 
 public class Chau_Down extends ActionBarActivity implements ActionBar.TabListener {
@@ -92,7 +110,23 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chau__down, menu);
+        /*getMenuInflater().inflate(R.menu.menu_chau__down, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(getApplicationContext(), SearchableActivity.class)));*/
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_chau__down, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+       // searchView.setIconifiedByDefault(false);
+
         return true;
     }
 
