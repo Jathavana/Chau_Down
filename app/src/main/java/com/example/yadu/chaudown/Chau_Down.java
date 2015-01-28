@@ -16,7 +16,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class Chau_Down extends ActionBarActivity implements ActionBar.TabListener {
@@ -74,6 +77,17 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        /*
+        GridView gridview = (GridView) findViewById(R.id.gridView);
+        gridview.setAdapter(new ButtonAdapter(this));
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+        */
     }
 
 
