@@ -1,6 +1,14 @@
 package com.example.yadu.chaudown;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+
+import android.app.ListFragment;
+
+import android.support.v4.view.MenuItemCompat;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -16,10 +24,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.ExpandableListView;
+
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.SearchManager;
+import android.widget.SearchView;
+import android.content.Context;
+import android.content.ComponentName;
+import android.view.MenuInflater;
+
+
+
 
 
 public class Chau_Down extends ActionBarActivity implements ActionBar.TabListener {
@@ -78,15 +97,29 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                             .setTabListener(this));
         }
 
-
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chau__down, menu);
+        /*getMenuInflater().inflate(R.menu.menu_chau__down, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(getApplicationContext(), SearchableActivity.class)));*/
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_chau__down, menu);
+
+        // Get the SearchView and set the searchable configuration
+        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+       // searchView.setIconifiedByDefault(false);
+
         return true;
     }
 
@@ -209,6 +242,10 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment2 extends Fragment {
+        ExpandableListAdapter listAdapter;
+        ExpandableListView expListView;
+        List<String> listDataHeader;
+        HashMap<String, List<String>> listDataChild;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -230,11 +267,79 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         public PlaceholderFragment2() {
         }
 
+        /*
+         * Preparing the list data
+         */
+        public void prepareListData() {
+            listDataHeader = new ArrayList<String>();
+            listDataChild = new HashMap<String, List<String>>();
+
+            // Adding child data
+            listDataHeader.add("Dairy");
+            listDataHeader.add("Grains");
+            listDataHeader.add("Meats");
+            listDataHeader.add("Produce");
+            listDataHeader.add("Spices");
+
+            // Adding child data
+            List<String> dairy = new ArrayList<String>();
+            dairy.add("Milk");
+            dairy.add("Cheese");
+            dairy.add("Yogurt");
+            dairy.add("Ice Cream");
+
+            List<String> grains = new ArrayList<String>();
+            grains.add("Bread");
+            grains.add("Bagel");
+            grains.add("Rice");
+            grains.add("Ramen");
+            grains.add("Spaghetti");
+
+            List<String> meats = new ArrayList<String>();
+            meats.add("Beef");
+            meats.add("Chicken");
+            meats.add("Pork");
+            meats.add("Deer");
+            meats.add("Duck");
+            meats.add("Kangaroo");
+
+            List<String> produce = new ArrayList<String>();
+            produce.add("Apple");
+            produce.add("Orange");
+            produce.add("Pear");
+            produce.add("Lettuce");
+            produce.add("Tomato");
+            produce.add("Onion");
+
+            List<String> spices = new ArrayList<String>();
+            spices.add("Sugar");
+            spices.add("Spice");
+            spices.add("Everything Nice");
+            spices.add("Allspice");
+            spices.add("Old Spice");
+
+            listDataChild.put(listDataHeader.get(0), dairy); // Header, Child data
+            listDataChild.put(listDataHeader.get(1), grains);
+            listDataChild.put(listDataHeader.get(2), meats);
+            listDataChild.put(listDataHeader.get(3), produce);
+            listDataChild.put(listDataHeader.get(4), spices);
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_pantry, container, false);
 
+            // get the listview
+            expListView = (ExpandableListView) rootView.findViewById(R.id.listViewPantry);
+
+            // preparing list data
+            prepareListData();
+
+            listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
+
+            // setting list adapter
+            expListView.setAdapter(listAdapter);
 
             return rootView;
         }
