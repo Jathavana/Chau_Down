@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ChauDown.iml" filepath="$PROJECT_DIR$/ChauDown.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Chau_Down.iml" filepath="$PROJECT_DIR$/Chau_Down.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
