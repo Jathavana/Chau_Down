@@ -25,17 +25,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.support.v7.widget.SearchView;
 import android.widget.ExpandableListView;
 
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.app.SearchManager;
-import android.widget.SearchView;
+
 import android.content.Context;
-import android.content.ComponentName;
 import android.view.MenuInflater;
 
 
@@ -103,17 +101,37 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-
         inflater.inflate(R.menu.menu_chau__down, menu);
-
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         // The below line returned null even though it was used in Google sample code
-        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.action_search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(
-                new ComponentName(getApplicationContext(), SearchResultsActivity.class)));
+        /*searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(getApplicationContext(), SearchResultsActivity.class)));*/
+        if (null != searchView) {
+            searchView.setSearchableInfo(searchManager
+                    .getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false);
+        }
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextChange(String newText) {
+                // this is your adapter that will be filtered
+                return true;
+            }
 
+            public boolean onQueryTextSubmit(String query) {
+                //Here u can get the value "query" which is entered in the search box.
+                if (searchItem != null) {
+                    searchItem.collapseActionView();
+                }
+                Toast.makeText(getApplicationContext(), query,
+                        Toast.LENGTH_LONG).show();
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -231,13 +249,15 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
             View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
 
             GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
-            gridview.setAdapter(new ButtonAdapter(getActivity()));
+            gridview.setAdapter(new ImageAdapter(getActivity()));
 
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    Toast.makeText(getActivity().getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getActivity().getApplicationContext(),Recipe.class);
+                    startActivity(i);
                 }
             });
+
 
             return rootView;
         }
