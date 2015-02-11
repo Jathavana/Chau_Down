@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="pantryCategories">
+        <item>@string/dairy</item>
+        <item>@string/grains</item>
+        <item>@string/meats</item>
+        <item>@string/produce</item>
+        <item>@string/spices</item>
+    </string-array>
+</resources>

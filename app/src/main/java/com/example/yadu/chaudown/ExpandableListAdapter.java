@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
 /**
  * Created by Tom on 27/01/2015.
  */
@@ -18,10 +19,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<Ingredient>> _listDataChild;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+                                 HashMap<String, List<Ingredient>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -33,6 +34,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 .get(childPosition);
     }
 
+    public void addChild(String groupName, Ingredient item) {
+        this._listDataChild.get(getGroup(groupName)).add(item);
+    }
+
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
@@ -42,7 +47,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final String childText = getChild(groupPosition, childPosition).toString();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -65,6 +70,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int groupPosition) {
+        return this._listDataHeader.get(groupPosition);
+    }
+
+    public Object getGroup(String groupName) {
+        int groupPosition = this._listDataHeader.indexOf(groupName);
         return this._listDataHeader.get(groupPosition);
     }
 

@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Locale;
 
 
-import android.app.Activity;
-import android.app.ListFragment;
+import android.app.DialogFragment;
 
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -270,7 +268,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         ExpandableListAdapter listAdapter;
         ExpandableListView expListView;
         List<String> listDataHeader;
-        HashMap<String, List<String>> listDataChild;
+        HashMap<String, List<Ingredient>> listDataChild;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -297,51 +295,51 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
          */
         public void prepareListData() {
             listDataHeader = new ArrayList<String>();
-            listDataChild = new HashMap<String, List<String>>();
+            listDataChild = new HashMap<String, List<Ingredient>>();
 
             // Adding child data
-            listDataHeader.add("Dairy");
-            listDataHeader.add("Grains");
-            listDataHeader.add("Meats");
-            listDataHeader.add("Produce");
-            listDataHeader.add("Spices");
+            listDataHeader.add(getString(R.string.dairy));
+            listDataHeader.add(getString(R.string.grains));
+            listDataHeader.add(getString(R.string.meats));
+            listDataHeader.add(getString(R.string.produce));
+            listDataHeader.add(getString(R.string.spices));
 
             // Adding child data
-            List<String> dairy = new ArrayList<String>();
-            dairy.add("Milk");
-            dairy.add("Cheese");
-            dairy.add("Yogurt");
-            dairy.add("Ice Cream");
+            List<Ingredient> dairy = new ArrayList<Ingredient>();
+            dairy.add(new Ingredient("Milk", getString(R.string.dairy), 1));
+            dairy.add(new Ingredient("Cheese", getString(R.string.dairy), 1));
+            dairy.add(new Ingredient("Yogurt", getString(R.string.dairy), 1));
+            dairy.add(new Ingredient("Ice Cream", getString(R.string.dairy), 1));
 
-            List<String> grains = new ArrayList<String>();
-            grains.add("Bread");
-            grains.add("Bagel");
-            grains.add("Rice");
-            grains.add("Ramen");
-            grains.add("Spaghetti");
+            List<Ingredient> grains = new ArrayList<Ingredient>();
+            grains.add(new Ingredient("Spaghetti", getString(R.string.grains), 1));
+            grains.add(new Ingredient("Bagel", getString(R.string.grains), 1));
+            grains.add(new Ingredient("Rice", getString(R.string.grains), 1));
+            grains.add(new Ingredient("Ramen", getString(R.string.grains), 1));
+            grains.add(new Ingredient("Bread", getString(R.string.grains), 1));
 
-            List<String> meats = new ArrayList<String>();
-            meats.add("Beef");
-            meats.add("Chicken");
-            meats.add("Pork");
-            meats.add("Deer");
-            meats.add("Duck");
-            meats.add("Kangaroo");
+            List<Ingredient> meats = new ArrayList<Ingredient>();
+            meats.add(new Ingredient("Beef", getString(R.string.meats), 1));
+            meats.add(new Ingredient("Chicken", getString(R.string.meats), 1));
+            meats.add(new Ingredient("Pork", getString(R.string.meats), 1));
+            meats.add(new Ingredient("Deer", getString(R.string.meats), 1));
+            meats.add(new Ingredient("Duck", getString(R.string.meats), 1));
+            meats.add(new Ingredient("Kangaroo", getString(R.string.meats), 1));
 
-            List<String> produce = new ArrayList<String>();
-            produce.add("Apple");
-            produce.add("Orange");
-            produce.add("Pear");
-            produce.add("Lettuce");
-            produce.add("Tomato");
-            produce.add("Onion");
+            List<Ingredient> produce = new ArrayList<Ingredient>();
+            produce.add(new Ingredient("Apple", getString(R.string.produce), 1));
+            produce.add(new Ingredient("Orange", getString(R.string.produce), 1));
+            produce.add(new Ingredient("Pear", getString(R.string.produce), 1));
+            produce.add(new Ingredient("Lettuce", getString(R.string.produce), 1));
+            produce.add(new Ingredient("Tomato", getString(R.string.produce), 1));
+            produce.add(new Ingredient("Onion", getString(R.string.produce), 1));
 
-            List<String> spices = new ArrayList<String>();
-            spices.add("Sugar");
-            spices.add("Spice");
-            spices.add("Everything Nice");
-            spices.add("Allspice");
-            spices.add("Old Spice");
+            List<Ingredient> spices = new ArrayList<Ingredient>();
+            spices.add(new Ingredient("Sugar", getString(R.string.spices), 1));
+            spices.add(new Ingredient("Spice", getString(R.string.spices), 1));
+            spices.add(new Ingredient("Everything Nice", getString(R.string.spices), 1));
+            spices.add(new Ingredient("Allspice", getString(R.string.spices), 1));
+            spices.add(new Ingredient("Old Spice", getString(R.string.spices), 1));
 
             listDataChild.put(listDataHeader.get(0), dairy); // Header, Child data
             listDataChild.put(listDataHeader.get(1), grains);
@@ -370,9 +368,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         }
     }
     public void writeToListView(View view) {
-        ExpandableListView expListView = (ExpandableListView) findViewById(R.id.listViewPantry);
-        ExpandableListAdapter expListAdapter = (ExpandableListAdapter) expListView.getExpandableListAdapter();
-        expListAdapter.addChild(0, "test");
-        Toast.makeText(getApplicationContext(), "Added.", Toast.LENGTH_SHORT).show();
+        DialogFragment dialog = new AddIngredientDialogFragment();
+        dialog.show(getFragmentManager(), "IngredientDialogFragment");
     }
 }
