@@ -368,6 +368,11 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
 
             return rootView;
         }
-
+    }
+    public void writeToListView(View view) {
+        ExpandableListView expListView = (ExpandableListView) findViewById(R.id.listViewPantry);
+        ExpandableListAdapter expListAdapter = (ExpandableListAdapter) expListView.getExpandableListAdapter();
+        expListAdapter.addChild(0, "test");
+        Toast.makeText(getApplicationContext(), "Added.", Toast.LENGTH_SHORT).show();
     }
 }
