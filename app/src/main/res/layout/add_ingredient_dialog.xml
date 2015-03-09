@@ -35,6 +35,12 @@
         android:id="@+id/ingredientAmount"
         android:hint="@string/amount"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:id="@+id/error" />
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
