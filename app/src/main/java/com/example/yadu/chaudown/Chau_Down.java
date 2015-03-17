@@ -6,14 +6,12 @@ import java.util.List;
 import java.util.Locale;
 
 
-import android.app.Application;
 import android.app.DialogFragment;
 
 import android.content.Intent;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -312,12 +310,9 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
             List<Ingredient> produce = new ArrayList<Ingredient>();
             List<Ingredient> spices = new ArrayList<Ingredient>();
 
-            SQLiteDatabase db = getActivity().openOrCreateDatabase("ChauDown.db", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS Ingredient (" +
-                            "Name VARCHAR PRIMARY KEY, " +
-                            "Category VARCHAR, " +
-                            "Amount INT, " +
-                            "Unit VARCHAR);");
+            SQLiteDBHelper dbHelper = new SQLiteDBHelper();
+            SQLiteDatabase db = dbHelper.initDb(getActivity());
+
             Cursor resultSet = db.rawQuery("SELECT * FROM Ingredient", null);
 
             try {

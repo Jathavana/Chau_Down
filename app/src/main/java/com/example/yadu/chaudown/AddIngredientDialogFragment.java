@@ -3,7 +3,6 @@ package com.example.yadu.chaudown;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,11 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * Created by Tom on 11/02/2015.
@@ -79,26 +74,17 @@ public class AddIngredientDialogFragment extends DialogFragment {
 
             if (!ingredientName.isEmpty() && ingredientAmount > 0) {
                 Ingredient ingredient = new Ingredient(ingredientName, ingredientCategory, ingredientAmount, unitType);
-                SQLiteDatabase db = getActivity().openOrCreateDatabase("ChauDown.db", Context.MODE_PRIVATE, null);
-                insertIngredientToDb(db, ingredient);
+                SQLiteDBHelper dbHelper = new SQLiteDBHelper();
+                SQLiteDatabase db = dbHelper.initDb(getActivity());
+                if(dbHelper.insertIntoIngredient(db, ingredient)) {
+                    expListAdapter.addChild(ingredient.getCategory(), ingredient);
+                    expListAdapter.notifyDataSetChanged();
+                }
                 Toast.makeText(getActivity().getApplicationContext(), "Added.", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), "Please enter required fields.", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    private void insertIngredientToDb(SQLiteDatabase db, Ingredient ingredient) {
-        try {
-            String query = String.format("INSERT INTO Ingredient VALUES(" +
-                            "'%s', '%s', %s, '%s');",
-                    ingredient.getName(), ingredient.getCategory(), Integer.toString(ingredient.getAmount()), ingredient.getUnit());
-            db.execSQL(query);
-        } catch (Exception e) {
-            String query = String.format("UPDATE Ingredient SET Amount = Amount + %s WHERE Name = '%s'",
-                    Integer.toString(ingredient.getAmount()), ingredient.getName());
-            db.execSQL(query);
         }
     }
 }

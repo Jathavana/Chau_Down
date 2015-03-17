@@ -3,7 +3,9 @@ package com.example.yadu.chaudown;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.widget.TextView;
  * Created by Tom on 27/01/2015.
  */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
-
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
@@ -62,10 +63,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
-        ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.btnDelete);
+        final ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.btnDelete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SQLiteDBHelper dbHelper = new SQLiteDBHelper();
+                SQLiteDatabase db = dbHelper.initDb((Activity)_context);
+                dbHelper.deleteFromIngredient(db, childText);
                 removeChild(getGroup(groupPosition), childPosition);
                 notifyDataSetChanged();
             }
