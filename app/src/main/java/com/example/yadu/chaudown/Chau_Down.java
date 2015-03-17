@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Locale;
 
 
+import android.app.Application;
 import android.app.DialogFragment;
 
 import android.content.Intent;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -33,9 +37,6 @@ import android.app.SearchManager;
 
 import android.content.Context;
 import android.view.MenuInflater;
-
-
-
 
 
 public class Chau_Down extends ActionBarActivity implements ActionBar.TabListener {
@@ -251,7 +252,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
 
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    Intent i = new Intent(getActivity().getApplicationContext(),Recipe.class);
+                    Intent i = new Intent(getActivity().getApplicationContext(), Recipe.class);
                     startActivity(i);
                 }
             });
@@ -293,7 +294,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         /*
          * Preparing the list data
          */
-        public void prepareListData() {
+        public void prepareListData(Context context) {
             listDataHeader = new ArrayList<String>();
             listDataChild = new HashMap<String, List<Ingredient>>();
 
@@ -306,42 +307,53 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
 
             // Adding child data
             List<Ingredient> dairy = new ArrayList<Ingredient>();
-            dairy.add(new Ingredient("Milk", getString(R.string.dairy), 1));
-            dairy.add(new Ingredient("Cheese", getString(R.string.dairy), 1));
-            dairy.add(new Ingredient("Yogurt", getString(R.string.dairy), 1));
-            dairy.add(new Ingredient("Ice Cream", getString(R.string.dairy), 1));
-
             List<Ingredient> grains = new ArrayList<Ingredient>();
-            grains.add(new Ingredient("Spaghetti", getString(R.string.grains), 1));
-            grains.add(new Ingredient("Bagel", getString(R.string.grains), 1));
-            grains.add(new Ingredient("Rice", getString(R.string.grains), 1));
-            grains.add(new Ingredient("Ramen", getString(R.string.grains), 1));
-            grains.add(new Ingredient("Bread", getString(R.string.grains), 1));
-
             List<Ingredient> meats = new ArrayList<Ingredient>();
-            meats.add(new Ingredient("Beef", getString(R.string.meats), 1));
-            meats.add(new Ingredient("Chicken", getString(R.string.meats), 1));
-            meats.add(new Ingredient("Pork", getString(R.string.meats), 1));
-            meats.add(new Ingredient("Deer", getString(R.string.meats), 1));
-            meats.add(new Ingredient("Duck", getString(R.string.meats), 1));
-            meats.add(new Ingredient("Kangaroo", getString(R.string.meats), 1));
-
             List<Ingredient> produce = new ArrayList<Ingredient>();
-            produce.add(new Ingredient("Apple", getString(R.string.produce), 1));
-            produce.add(new Ingredient("Orange", getString(R.string.produce), 1));
-            produce.add(new Ingredient("Pear", getString(R.string.produce), 1));
-            produce.add(new Ingredient("Lettuce", getString(R.string.produce), 1));
-            produce.add(new Ingredient("Tomato", getString(R.string.produce), 1));
-            produce.add(new Ingredient("Onion", getString(R.string.produce), 1));
-
             List<Ingredient> spices = new ArrayList<Ingredient>();
-            spices.add(new Ingredient("Sugar", getString(R.string.spices), 1));
-            spices.add(new Ingredient("Spice", getString(R.string.spices), 1));
-            spices.add(new Ingredient("Everything Nice", getString(R.string.spices), 1));
-            spices.add(new Ingredient("Allspice", getString(R.string.spices), 1));
-            spices.add(new Ingredient("Old Spice", getString(R.string.spices), 1));
 
-            listDataChild.put(listDataHeader.get(0), dairy); // Header, Child data
+            SQLiteDatabase db = getActivity().openOrCreateDatabase("ChauDown.db", Context.MODE_PRIVATE, null);
+            db.execSQL("CREATE TABLE IF NOT EXISTS Ingredient (" +
+                            "Name VARCHAR PRIMARY KEY, " +
+                            "Category VARCHAR, " +
+                            "Amount INT, " +
+                            "Unit VARCHAR);");
+            Cursor resultSet = db.rawQuery("SELECT * FROM Ingredient", null);
+
+            try {
+                resultSet.moveToFirst();
+                while (resultSet.isAfterLast() == false) {
+                    Ingredient newIngredient = new Ingredient(resultSet.getString(0),
+                            resultSet.getString(1),
+                            resultSet.getInt(2),
+                            resultSet.getString(3));
+                    switch (newIngredient.getCategory()) {
+                        case "Dairy":
+                            dairy.add(newIngredient);
+                            break;
+                        case "Grains":
+                            grains.add(newIngredient);
+                            break;
+                        case "Meats":
+                            meats.add(newIngredient);
+                            break;
+                        case "Produce":
+                            produce.add(newIngredient);
+                            break;
+                        case "Spices":
+                            spices.add(newIngredient);
+                            break;
+                        default:
+                            ;
+                    }
+                    resultSet.moveToNext();
+                }
+            } finally {
+                resultSet.close();
+            }
+
+            // Header, Child data
+            listDataChild.put(listDataHeader.get(0), dairy);
             listDataChild.put(listDataHeader.get(1), grains);
             listDataChild.put(listDataHeader.get(2), meats);
             listDataChild.put(listDataHeader.get(3), produce);
@@ -357,7 +369,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
             expListView = (ExpandableListView) rootView.findViewById(R.id.listViewPantry);
 
             // preparing list data
-            prepareListData();
+            prepareListData(getActivity());
 
             listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
 
@@ -367,6 +379,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
             return rootView;
         }
     }
+
     public void writeToListView(View view) {
         DialogFragment dialog = new AddIngredientDialogFragment();
         dialog.show(getFragmentManager(), "IngredientDialogFragment");

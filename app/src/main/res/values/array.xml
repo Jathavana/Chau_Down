@@ -6,4 +6,17 @@
         <item>@string/produce</item>
         <item>@string/spices</item>
     </string-array>
+    <string-array name="ingredientUnits">
+        <item>@string/cup</item>
+        <item>@string/gallon</item>
+        <item>@string/pound</item>
+        <item>@string/ounce</item>
+        <item>@string/pinch</item>
+        <item>@string/pint</item>
+        <item>@string/quart</item>
+        <item>@string/stone</item>
+        <item>@string/tablespoon</item>
+        <item>@string/teaspoon</item>
+        <item>@string/whole</item>
+    </string-array>
 </resources>

@@ -23,7 +23,10 @@
         android:layout_marginBottom="7dp"
         android:hint="@string/name" />
 
-    <EditText
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
@@ -35,11 +38,18 @@
         android:id="@+id/ingredientAmount"
         android:hint="@string/amount"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#FF0000"
-        android:id="@+id/error" />
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredientUnit"
+            android:spinnerMode="dialog"
+            android:layout_marginTop="7dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="16dp"
+            android:entries="@array/ingredientUnits"/>
+    </LinearLayout>
+
 
     <Spinner
         android:layout_width="match_parent"

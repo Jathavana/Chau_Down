@@ -22,5 +22,16 @@
     <string name="pick_category">Category:</string>
     <string name="name">Name</string>
     <string name="amount">Amount</string>
+    <string name="teaspoon">tsp</string>
+    <string name="tablespoon">tbsp</string>
+    <string name="cup">cup</string>
+    <string name="pint">pint</string>
+    <string name="quart">quart</string>
+    <string name="pound">lb</string>
+    <string name="ounce">oz</string>
+    <string name="gallon">gal</string>
+    <string name="pinch">pinch</string>
+    <string name="whole">whole</string>
+    <string name="stone">stone</string>
 
 </resources>

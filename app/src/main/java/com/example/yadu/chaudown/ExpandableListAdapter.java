@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 /**
@@ -38,13 +39,17 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._listDataChild.get(getGroup(groupName)).add(item);
     }
 
+    public void removeChild(Object group, int childPosition) {
+        this._listDataChild.get(group).remove(childPosition);
+    }
+
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = getChild(groupPosition, childPosition).toString();
@@ -57,6 +62,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+        ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeChild(getGroup(groupPosition), childPosition);
+                notifyDataSetChanged();
+            }
+        });
 
         txtListChild.setText(childText);
         return convertView;

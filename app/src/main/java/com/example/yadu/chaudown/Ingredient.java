@@ -7,14 +7,16 @@ public class Ingredient {
     private String _name;
     private String _category;
     private int _amount;
+    private String _unit;
 
     public Ingredient() {
     }
 
-    public Ingredient(String name, String category, int amount) {
+    public Ingredient(String name, String category, int amount, String unit) {
         this._name = name;
         this._category = category;
         this._amount = amount;
+        this._unit = unit;
     }
 
     public String getName() {
@@ -39,6 +41,14 @@ public class Ingredient {
 
     public void setAmount(int newAmount) {
         this._amount = newAmount;
+    }
+
+    public String getUnit() {
+        return this._unit;
+    }
+
+    public void setUnit(String newUnit) {
+        this._unit = newUnit;
     }
 
     @Override

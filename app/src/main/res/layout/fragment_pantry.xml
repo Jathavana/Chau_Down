@@ -13,11 +13,10 @@
         android:layout_alignParentTop="true"
         android:src="@drawable/pantry_shelf"/>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_add"
-        android:textSize="25sp"
+        android:background="@drawable/add"
         android:id="@+id/btnAdd"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -26,6 +25,7 @@
     <ExpandableListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:id="@+id/listViewPantry"
         android:layout_below="@+id/btnAdd"
         android:layout_alignParentStart="true" />
