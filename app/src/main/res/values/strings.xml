@@ -33,5 +33,6 @@
     <string name="pinch">pinch</string>
     <string name="whole">whole</string>
     <string name="stone">stone</string>
+    <string name="edit">Edit</string>
 
 </resources>

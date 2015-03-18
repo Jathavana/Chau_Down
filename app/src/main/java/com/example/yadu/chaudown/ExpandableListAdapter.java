@@ -4,15 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Tom on 27/01/2015.
@@ -63,6 +66,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = new EditIngredientDialogFragment();
+                Bundle args = new Bundle();
+                args.putString("itemName", childText);
+                dialog.setArguments(args);
+                dialog.show(((Activity)_context).getFragmentManager(), "IngredientDialogFragment");
+            }
+        });
+
         final ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.btnDelete);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +85,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 SQLiteDBHelper dbHelper = new SQLiteDBHelper();
                 SQLiteDatabase db = dbHelper.initDb((Activity)_context);
                 dbHelper.deleteFromIngredient(db, childText);
+
                 removeChild(getGroup(groupPosition), childPosition);
                 notifyDataSetChanged();
+                Toast.makeText(_context, "Deleted.", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -36,6 +36,16 @@ public class SQLiteDBHelper {
         }
     }
 
+    public void updateIngredient(SQLiteDatabase db, Ingredient ingredient) {
+        String query = String.format("UPDATE Ingredient SET " +
+                                    "Category = '%s', " +
+                                    "Amount = %s, " +
+                                    "Unit = '%s'" +
+                                    "WHERE Name = '%s';",
+                                    ingredient.getCategory(), Integer.toString(ingredient.getAmount()), ingredient.getUnit(), ingredient.getName());
+        db.execSQL(query);
+    }
+
     public void deleteFromIngredient(SQLiteDatabase db, String ingredientName) {
         String query = "DELETE FROM Ingredient WHERE Name = '" + ingredientName + "';";
         db.execSQL(query);

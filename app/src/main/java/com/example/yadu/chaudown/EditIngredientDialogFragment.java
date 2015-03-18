@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,22 +13,42 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
  * Created by Tom on 11/02/2015.
  */
-public class AddIngredientDialogFragment extends DialogFragment {
+public class EditIngredientDialogFragment extends DialogFragment {
     View dialogView;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        dialogView = inflater.inflate(R.layout.add_ingredient_dialog, null);
+        dialogView = inflater.inflate(R.layout.edit_ingredient_dialog, null);
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        SQLiteDBHelper dbHelper = new SQLiteDBHelper();
+        SQLiteDatabase db = dbHelper.initDb(getActivity());
+        Cursor resultSet = db.rawQuery("SELECT * FROM Ingredient WHERE Name = '" + getArguments().getString("itemName") + "';", null);
+        try {
+            resultSet.moveToFirst();
+            TextView banner = (TextView) dialogView.findViewById(R.id.banner);
+            EditText editAmount = (EditText) dialogView.findViewById(R.id.ingredientAmount);
+            Spinner spinnerCategory = (Spinner) dialogView.findViewById(R.id.ingredientCategory);
+            Spinner spinnerUnit = (Spinner) dialogView.findViewById(R.id.ingredientUnit);
+
+            banner.setText(banner.getText() + " " + resultSet.getString(0));
+            editAmount.setText(resultSet.getString(2));
+            spinnerCategory.setSelection(getSpinnerIndex(spinnerCategory, resultSet.getString(1)));
+            spinnerUnit.setSelection(getSpinnerIndex(spinnerUnit, resultSet.getString(3)));
+        } finally {
+            resultSet.close();
+        }
+
         builder.setView(dialogView)
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 })
@@ -53,7 +74,7 @@ public class AddIngredientDialogFragment extends DialogFragment {
 
         @Override
         public void onClick(View v) {
-            String ingredientName = "";
+            String ingredientName = getArguments().getString("itemName");
             String ingredientAmountStr = "";
             int ingredientAmount = 0;
             String ingredientCategory = "";
@@ -61,32 +82,38 @@ public class AddIngredientDialogFragment extends DialogFragment {
 
             ExpandableListView expListView = (ExpandableListView) getActivity().findViewById(R.id.listViewPantry);
             ExpandableListAdapter expListAdapter = (ExpandableListAdapter) expListView.getExpandableListAdapter();
-            EditText editName = (EditText) dialogView.findViewById(R.id.ingredientName);
             EditText editAmount = (EditText) dialogView.findViewById(R.id.ingredientAmount);
             Spinner spinnerCategory = (Spinner) dialogView.findViewById(R.id.ingredientCategory);
             Spinner spinnerUnit = (Spinner) dialogView.findViewById(R.id.ingredientUnit);
 
-            ingredientName = (editName.getText().length() == 0) ? "" : editName.getText().toString().toLowerCase();
             ingredientAmountStr = (editAmount.getText().length() == 0) ? "0" : editAmount.getText().toString();
             ingredientAmount = Integer.parseInt(ingredientAmountStr);
             ingredientCategory = spinnerCategory.getSelectedItem().toString();
             unitType = spinnerUnit.getSelectedItem().toString();
 
-
             if (!ingredientName.isEmpty() && ingredientAmount > 0) {
                 Ingredient ingredient = new Ingredient(ingredientName, ingredientCategory, ingredientAmount, unitType);
                 SQLiteDBHelper dbHelper = new SQLiteDBHelper();
                 SQLiteDatabase db = dbHelper.initDb(getActivity());
-                if(dbHelper.insertIntoIngredient(db, ingredient)) {
-                    expListAdapter.addChild(ingredient.getCategory(), ingredient);
-                    expListAdapter.notifyDataSetChanged();
-                }
-                Toast.makeText(getActivity().getApplicationContext(), "Added.", Toast.LENGTH_SHORT).show();
+                dbHelper.updateIngredient(db, ingredient);
+
+                Toast.makeText(getActivity().getApplicationContext(), "Edited.", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             } else {
                 Toast.makeText(getActivity().getApplicationContext(), "Please enter required fields.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private int getSpinnerIndex(Spinner spinner, String value) {
+        int index = 0;
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }
 
