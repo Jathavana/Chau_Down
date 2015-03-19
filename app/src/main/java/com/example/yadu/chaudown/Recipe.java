@@ -1,8 +1,9 @@
 package com.example.yadu.chaudown;
 
 import android.app.SearchManager;
-import android.content.ComponentName;
+
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -11,21 +12,16 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.ViewGroup.LayoutParams;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Recipe extends ActionBarActivity implements MongoAdapter {
+public class Recipe extends ActionBarActivity{
 
     // PUT YOUR API KEY HERE!
     private static final String API_KEY = "wT2XOfoaP8f0Q1akvhXjKg0wpqqkgSX_";
@@ -61,9 +57,9 @@ public class Recipe extends ActionBarActivity implements MongoAdapter {
         description = (TextView) findViewById(R.id.description);
         ingredientUnitsView = (TextView) findViewById(R.id.itemQuantity);
         recipeSteps = (TextView) findViewById(R.id.recipeSteps);
+        new GetRecipe().execute();
 
 
-        Mongo.get(this, "Recipes", null);
     }
 
 
@@ -124,41 +120,52 @@ public class Recipe extends ActionBarActivity implements MongoAdapter {
         }
     }
 
-    // Method to process the result returned from a Mongo.get() call
-    public void processResult( String result )
-    {
 
-        try {
-            JSONArray jsonArray = new JSONArray(result);
-            JSONObject jsonObject = jsonArray.getJSONObject(position);
+    private class GetRecipe extends AsyncTask<Void, Void, Void> implements MongoAdapter {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-             recipeTitle.setText(jsonObject.getString("Recipe"));
-            description.setText(jsonObject.getString("Description"));
-            ingredientView.setText(jsonObject.getString("Ingredients"));
-            ingredientUnitsView.setText(jsonObject.getString("IngredientsUnits"));
-            recipeSteps.setText(jsonObject.getString("Instructions"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Mongo.get(this, "Recipes", null);
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
 
-        // Toast the result
-        //Toast.makeText( this, result, Toast.LENGTH_LONG ).show();
+        // Method should return the name of the database you want to access
+        public String dbName()
+        {
+            return "chau_down";
+        }
 
+        // Method should return the API Key as shown at the bottom of the MongoLab user page
+        public String apiKey()
+        {
+            return API_KEY;
+        }
+
+        @Override
+        public void processResult(String result) {
+            try{
+                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject = jsonArray.getJSONObject(position);
+
+                recipeTitle.setText(jsonObject.getString("Recipe"));
+                description.setText(jsonObject.getString("Description"));
+                ingredientView.setText(jsonObject.getString("Ingredients"));
+                ingredientUnitsView.setText(jsonObject.getString("IngredientsUnits"));
+                recipeSteps.setText(jsonObject.getString("Instructions"));
+
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
     }
-
-    // Method should return the name of the database you want to access
-    public String dbName()
-    {
-        return "chau_down";
-    }
-
-    // Method should return the API Key as shown at the bottom of the MongoLab user page
-    public String apiKey()
-    {
-        return API_KEY;
-    }
-
 }
