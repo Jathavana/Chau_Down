@@ -11,14 +11,43 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
-public class Recipe extends ActionBarActivity {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Recipe extends ActionBarActivity implements MongoAdapter {
+
+    // PUT YOUR API KEY HERE!
+    private static final String API_KEY = "wT2XOfoaP8f0Q1akvhXjKg0wpqqkgSX_";
+
+    public TextView recipeTitle;
+    public TextView description;
+    public TextView ingredientView;
+    public TextView ingredientUnitsView;
+    public TextView recipeSteps;
+    public int position;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        String textPos = Integer.toString(extras.getInt("position"));
+        position = extras.getInt("position");
+        Toast.makeText(this, "" + textPos, Toast.LENGTH_SHORT).show();
+
+
+
         setContentView(R.layout.activity_recipe);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -26,6 +55,15 @@ public class Recipe extends ActionBarActivity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("Recipe");
         actionBar.setDisplayUseLogoEnabled(false);
+
+        recipeTitle = (TextView) findViewById(R.id.RecipeTitle);
+        ingredientView = (TextView) findViewById(R.id.item);
+        description = (TextView) findViewById(R.id.description);
+        ingredientUnitsView = (TextView) findViewById(R.id.itemQuantity);
+        recipeSteps = (TextView) findViewById(R.id.recipeSteps);
+
+
+        Mongo.get(this, "Recipes", null);
     }
 
 
@@ -85,4 +123,42 @@ public class Recipe extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    // Method to process the result returned from a Mongo.get() call
+    public void processResult( String result )
+    {
+
+        try {
+            JSONArray jsonArray = new JSONArray(result);
+            JSONObject jsonObject = jsonArray.getJSONObject(position);
+
+             recipeTitle.setText(jsonObject.getString("Recipe"));
+            description.setText(jsonObject.getString("Description"));
+            ingredientView.setText(jsonObject.getString("Ingredients"));
+            ingredientUnitsView.setText(jsonObject.getString("IngredientsUnits"));
+            recipeSteps.setText(jsonObject.getString("Instructions"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+        // Toast the result
+        //Toast.makeText( this, result, Toast.LENGTH_LONG ).show();
+
+    }
+
+    // Method should return the name of the database you want to access
+    public String dbName()
+    {
+        return "chau_down";
+    }
+
+    // Method should return the API Key as shown at the bottom of the MongoLab user page
+    public String apiKey()
+    {
+        return API_KEY;
+    }
+
 }

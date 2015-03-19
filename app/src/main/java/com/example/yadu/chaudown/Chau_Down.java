@@ -251,6 +251,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                     Intent i = new Intent(getActivity().getApplicationContext(), Recipe.class);
+                    i.putExtra("position", position);
                     startActivity(i);
                 }
             });

@@ -5,16 +5,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
-        <TextView android:id="@+id/section_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+
 
         <ImageView
             android:layout_width="wrap_content"
@@ -32,7 +25,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="RAMEN RECIPE"
-            android:id="@+id/textView"
+            android:id="@+id/RecipeTitle"
             android:textIsSelectable="true"
             android:textSize="30sp" />
 
@@ -40,8 +33,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/description"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="INGREDIANTE"
-            android:id="@+id/textView2"
+            android:id="@+id/ingredient"
             android:textSize="25sp" />
 
         <TableLayout
@@ -50,31 +50,20 @@
             android:layout_gravity="center_vertical"
             android:stretchColumns="2">
             <TableRow>
-                <TextView android:text="Noodles"
-                    android:textSize="20sp"
+                <TextView
+                    android:textSize="15sp"
                     android:layout_weight="1"
                     android:layout_width="0dip"
-                    android:layout_height="wrap_content"/>
-                <TextView android:text="1 Pound"
-                    android:textSize="20sp"
-                    android:layout_width="0dip"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="right"/>
-
-            </TableRow>
-            <TableRow>
-                <TextView android:text="Dashi"
-                    android:textSize="20sp"
-                    android:layout_weight="1"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"/>
-                <TextView android:text="1 gram"
-                    android:textSize="20sp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/item"/>
+                <TextView
+                    android:textSize="15sp"
                     android:layout_width="0dip"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:gravity="right"/>
+                    android:gravity="right"
+                    android:id="@+id/itemQuantity"/>
+                />
 
             </TableRow>
         </TableLayout>
@@ -90,8 +79,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1. "
-            android:id="@+id/textView4" />
+            android:id="@+id/recipeSteps"
+            android:textSize="15sp"/>
 
     </LinearLayout>
 </ScrollView>
