@@ -2,6 +2,7 @@ package com.example.yadu.chaudown;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -34,6 +35,25 @@ public class SQLiteDBHelper {
             db.execSQL(query);
             return false;
         }
+    }
+
+    public Ingredient getIngredientByName(SQLiteDatabase db, String ingredientName) {
+        Cursor resultSet = db.rawQuery("SELECT * FROM Ingredient WHERE Name = '" + ingredientName + "'", null);
+        Ingredient ingredient = new Ingredient("", "", 0, "");
+
+        try {
+            resultSet.moveToFirst();
+            while (resultSet.isAfterLast() == false) {
+                ingredient = new Ingredient(resultSet.getString(0),
+                        resultSet.getString(1),
+                        resultSet.getInt(2),
+                        resultSet.getString(3));
+                resultSet.moveToNext();
+            }
+        } catch(Exception e) {
+            resultSet.close();
+        }
+        return ingredient;
     }
 
     public void updateIngredient(SQLiteDatabase db, Ingredient ingredient) {

@@ -30,6 +30,7 @@ import android.widget.ExpandableListView;
 
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.SearchManager;
 
@@ -256,6 +257,14 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                 }
             });
 
+            TextView txtAddRecipe = (TextView) rootView.findViewById(R.id.txtAddRecipe);
+            txtAddRecipe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    Intent i = new Intent(getActivity().getApplicationContext(), AddRecipe.class);
+                    startActivity(i);
+                }
+            });
 
             return rootView;
         }

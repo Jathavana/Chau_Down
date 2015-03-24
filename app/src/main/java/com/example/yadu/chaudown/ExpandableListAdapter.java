@@ -47,6 +47,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._listDataChild.get(group).remove(childPosition);
     }
 
+    public void removeChild(String groupName, int childPosition) {
+        this._listDataChild.get(getGroup(groupName)).remove(childPosition);
+    }
+
     @Override
     public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
@@ -73,6 +77,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 DialogFragment dialog = new EditIngredientDialogFragment();
                 Bundle args = new Bundle();
                 args.putString("itemName", childText);
+                args.putInt("childPosition", childPosition);
                 dialog.setArguments(args);
                 dialog.show(((Activity)_context).getFragmentManager(), "IngredientDialogFragment");
             }

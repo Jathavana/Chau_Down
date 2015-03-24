@@ -33,6 +33,11 @@
             android:label="@string/app_name"
             android:parentActivityName=".Chau_Down">
         </activity>
+        <activity
+            android:name=".AddRecipe"
+            android:label="@string/app_name"
+            android:parentActivityName=".Chau_Down">
+        </activity>
     </application>
 
 </manifest>

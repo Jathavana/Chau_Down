@@ -72,7 +72,6 @@ public class AddIngredientDialogFragment extends DialogFragment {
             ingredientCategory = spinnerCategory.getSelectedItem().toString();
             unitType = spinnerUnit.getSelectedItem().toString();
 
-
             if (!ingredientName.isEmpty() && ingredientAmount > 0) {
                 Ingredient ingredient = new Ingredient(ingredientName, ingredientCategory, ingredientAmount, unitType);
                 SQLiteDBHelper dbHelper = new SQLiteDBHelper();

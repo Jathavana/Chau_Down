@@ -95,7 +95,13 @@ public class EditIngredientDialogFragment extends DialogFragment {
                 Ingredient ingredient = new Ingredient(ingredientName, ingredientCategory, ingredientAmount, unitType);
                 SQLiteDBHelper dbHelper = new SQLiteDBHelper();
                 SQLiteDatabase db = dbHelper.initDb(getActivity());
+
+                Ingredient oldIngredient = dbHelper.getIngredientByName(db, ingredientName);
                 dbHelper.updateIngredient(db, ingredient);
+
+                expListAdapter.addChild(ingredient.getCategory(), ingredient);
+                expListAdapter.removeChild(oldIngredient.getCategory(), getArguments().getInt("childPosition"));
+                expListAdapter.notifyDataSetChanged();
 
                 Toast.makeText(getActivity().getApplicationContext(), "Edited.", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();

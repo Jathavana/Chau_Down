@@ -34,5 +34,6 @@
     <string name="whole">whole</string>
     <string name="stone">stone</string>
     <string name="edit">Edit</string>
+    <string name="add_recipe"><b><u>Add New Recipe</u></b></string>
 
 </resources>
