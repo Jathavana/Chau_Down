@@ -3,16 +3,21 @@ package com.example.yadu.chaudown;
 import android.app.SearchManager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +25,11 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class Recipe extends ActionBarActivity{
 
@@ -31,7 +41,11 @@ public class Recipe extends ActionBarActivity{
     public TextView ingredientView;
     public TextView ingredientUnitsView;
     public TextView recipeSteps;
+    public ImageView recipeImage;
     public int position;
+    public String imageLocation;
+    public Bitmap image;
+
 
 
     @Override
@@ -57,6 +71,7 @@ public class Recipe extends ActionBarActivity{
         description = (TextView) findViewById(R.id.description);
         ingredientUnitsView = (TextView) findViewById(R.id.itemQuantity);
         recipeSteps = (TextView) findViewById(R.id.recipeSteps);
+        recipeImage = (ImageView) findViewById((R.id.imageView3));
         new GetRecipe().execute();
 
 
@@ -162,10 +177,75 @@ public class Recipe extends ActionBarActivity{
                 ingredientView.setText(jsonObject.getString("Ingredients"));
                 ingredientUnitsView.setText(jsonObject.getString("IngredientsUnits"));
                 recipeSteps.setText(jsonObject.getString("Instructions"));
+                imageLocation = jsonObject.getString("BannerURL");
+                new GetImage().execute();
+
+                Log.d("img", imageLocation);
+
 
             }catch(JSONException e){
                 e.printStackTrace();
             }
         }
     }
+
+
+    private class GetImage extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+
+            try {
+                URL url = new URL(imageLocation);
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+
+                //BitmapFactory.decodeStream(input);
+                image = BitmapFactory.decodeStream(input);
+                Log.d("image", image.toString());
+                //recipeImage.setImageBitmap(BitmapFactory.decodeStream(input));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("getBmpFromUrl error: ", e.getMessage());
+                return null;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(image != null){
+                recipeImage.setImageBitmap(image);
+
+                //Toast.makeText(getApplicationContext(), image.toString(), Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "Error loading image", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    /*public static Bitmap getBitmapFromURL(String link) {
+        try {
+            URL url = new URL(link);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+
+            return BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("getBmpFromUrl error: ", e.getMessage());
+            return null;
+        }
+    }*/
 }
