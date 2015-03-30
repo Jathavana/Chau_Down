@@ -35,5 +35,7 @@
     <string name="stone">stone</string>
     <string name="edit">Edit</string>
     <string name="add_recipe"><b><u>Add New Recipe</u></b></string>
+    <string name="ingredients"><b>Ingredients</b></string>
+    <string name="directions"><b>Directions</b></string>
 
 </resources>

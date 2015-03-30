@@ -16,6 +16,8 @@ import android.content.Intent;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -77,14 +79,6 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-
-        //Log.d("hi", "test");
-        //Log.d("img", bm.toString());
-
-
-
-
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -114,7 +108,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#552700")));
     }
 
     @Override
@@ -303,6 +297,7 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                     startActivity(i);
                 }
             });
+
             return rootView;
         }
     }

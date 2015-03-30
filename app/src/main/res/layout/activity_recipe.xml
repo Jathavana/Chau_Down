@@ -5,17 +5,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
+        android:orientation="vertical"
+        android:layout_margin="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView3"
             android:layout_below="@+id/section_label"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
             />
 
@@ -38,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="INGREDIANTE"
+            android:text="@string/ingredients"
             android:id="@+id/ingredient"
             android:textSize="25sp" />
 
@@ -70,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="RECIPES"
+            android:text="@string/directions"
             android:id="@+id/textView3"
             android:textSize="25sp" />
 
