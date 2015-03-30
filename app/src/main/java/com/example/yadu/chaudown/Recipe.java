@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -173,6 +174,7 @@ public class Recipe extends ActionBarActivity{
                 JSONObject jsonObject = jsonArray.getJSONObject(position);
 
                 recipeTitle.setText(jsonObject.getString("Recipe"));
+                recipeTitle.setTypeface(null, Typeface.BOLD);
                 description.setText(jsonObject.getString("Description"));
                 ingredientView.setText(jsonObject.getString("Ingredients"));
                 ingredientUnitsView.setText(jsonObject.getString("IngredientsUnits"));
