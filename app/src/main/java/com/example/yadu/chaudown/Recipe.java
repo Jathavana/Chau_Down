@@ -54,7 +54,7 @@ public class Recipe extends ActionBarActivity{
         Bundle extras = getIntent().getExtras();
         String textPos = Integer.toString(extras.getInt("position"));
         position = extras.getInt("position");
-        Toast.makeText(this, "" + textPos, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "" + textPos, Toast.LENGTH_SHORT).show();
 
 
 
