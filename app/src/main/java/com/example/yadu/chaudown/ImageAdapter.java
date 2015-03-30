@@ -1,6 +1,8 @@
 package com.example.yadu.chaudown;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,13 +15,16 @@ import android.widget.TextView;
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
+    public static Bitmap bm[];
 
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, Bitmap inBm[]) {
         mContext = c;
+        this.bm = inBm;
+        //Log.d("LOOOOOOOOOOOOOOOOOOOL", bm.toString());
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return bm.length;
     }
 
     public Object getItem(int position) {
@@ -42,16 +47,9 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(mThumbIds[position]);
+        imageView.setImageBitmap(bm[position]);
+        //imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
 
-    // references to our images
-    private Integer[] mThumbIds = {
-
-            R.drawable.primavera, R.drawable.donair,
-            R.drawable.pizza, R.drawable.ramen,
-
-
-    };
 }

@@ -232,20 +232,5 @@ public class Recipe extends ActionBarActivity{
             }
         }
     }
-    /*public static Bitmap getBitmapFromURL(String link) {
-        try {
-            URL url = new URL(link);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
 
-            return BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("getBmpFromUrl error: ", e.getMessage());
-            return null;
-        }
-    }*/
 }

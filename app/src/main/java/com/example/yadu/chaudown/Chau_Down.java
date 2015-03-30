@@ -1,5 +1,9 @@
 package com.example.yadu.chaudown;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +16,9 @@ import android.content.Intent;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -20,6 +27,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,9 +45,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.view.MenuInflater;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Chau_Down extends ActionBarActivity implements ActionBar.TabListener {
 
+    public List<Bitmap> bmList = new ArrayList<Bitmap>();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -63,6 +76,14 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+
+        //Log.d("hi", "test");
+        //Log.d("img", bm.toString());
+
+
+
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -219,7 +240,19 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements MongoAdapter2{
+        Bitmap bm[];
+        GridView gridview;
+        public String dbName()
+        {
+            return "chau_down";
+        }
+
+        public String apiKey()
+        {
+            return "wT2XOfoaP8f0Q1akvhXjKg0wpqqkgSX_";
+        }
+
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -242,12 +275,17 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         }
 
         @Override
+        public void processResult(Bitmap[] result) {
+            bm = result;
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
+            gridview = (GridView) rootView.findViewById(R.id.gridView);
 
-            GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
-            gridview.setAdapter(new ImageAdapter(getActivity()));
+            MongoGet2.get(this, "Recipes", null, gridview, getActivity());
 
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -265,7 +303,6 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
                     startActivity(i);
                 }
             });
-
             return rootView;
         }
     }
@@ -389,4 +426,125 @@ public class Chau_Down extends ActionBarActivity implements ActionBar.TabListene
         DialogFragment dialog = new AddIngredientDialogFragment();
         dialog.show(getFragmentManager(), "IngredientDialogFragment");
     }
+
+    private static class GetImagesGeneral extends AsyncTask<Void, Void, Void> implements MongoAdapter {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            Mongo.get(this, "Recipes", null);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        // Method should return the name of the database you want to access
+        public String dbName()
+        {
+            return "chau_down";
+        }
+
+        // Method should return the API Key as shown at the bottom of the MongoLab user page
+        public String apiKey()
+        {
+            return "wT2XOfoaP8f0Q1akvhXjKg0wpqqkgSX_";
+        }
+
+        @Override
+        public void processResult(String result) {
+            try{
+                JSONArray jsonArray = new JSONArray(result);
+                JSONObject jsonObject;
+
+               // bm = new Bitmap[jsonArray.length()];
+                for (int i = 0; i < jsonArray.length(); i++){
+                    jsonObject = jsonArray.getJSONObject(i);
+                    String imageLocation = jsonObject.getString("BannerURL");
+                    Bitmap image = getDamnFUCKINGIMAGES(imageLocation);
+                    //new GetImage().execute(imageLocation);
+                   // bmList.add(image);
+                    //bm[i] = image;
+                    Log.d("img", imageLocation);
+                }
+                //bm = bmList.toArray(new Bitmap[bmList.size()]);
+                //Log.d("img", bm.toString());
+
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
+        }
+
+        public Bitmap getDamnFUCKINGIMAGES(String imageLocation){
+            Bitmap image;
+            try {
+                URL url = new URL(imageLocation);
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+
+                //BitmapFactory.decodeStream(input);
+                image = BitmapFactory.decodeStream(input);
+                Log.d("image", image.toString());
+                //recipeImage.setImageBitmap(BitmapFactory.decodeStream(input));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("getBmpFromUrl error: ", e.getMessage());
+                return null;
+            }
+
+
+            return image;
+        }
+    }
+
+    private class GetImage extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... arg0) {
+            Bitmap image;
+            try {
+                URL url = new URL(arg0[0]);
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+
+                //BitmapFactory.decodeStream(input);
+                image = BitmapFactory.decodeStream(input);
+                //bmList.add(image);
+                Log.d("image", image.toString());
+                //recipeImage.setImageBitmap(BitmapFactory.decodeStream(input));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("getBmpFromUrl error: ", e.getMessage());
+                return null;
+            }
+            return image;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap image) {
+            super.onPostExecute(image);
+        }
+    }
+
+
+
+
 }
